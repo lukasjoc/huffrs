@@ -1,6 +1,6 @@
 # huffrs
 
-> Huffman Encoding/Decoding in Rust
+> Simple Huffman Encoding/Decoding in Rust
 
 Start:
 ```
