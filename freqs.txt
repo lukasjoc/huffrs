@@ -1,0 +1,78 @@
+CodeBook for Tree: HuffNode {
+    count: 4,
+    letter: None,
+    book: {
+        'e': [
+            false,
+        ],
+        'T': [
+            true,
+            true,
+        ],
+        'r': [
+            false,
+            true,
+        ],
+    },
+    left: Some(
+        HuffNode {
+            count: 2,
+            letter: None,
+            book: {
+                'T': [
+                    true,
+                    true,
+                ],
+                'r': [
+                    false,
+                    true,
+                ],
+            },
+            left: Some(
+                HuffNode {
+                    count: 1,
+                    letter: Some(
+                        'T',
+                    ),
+                    book: {
+                        'T': [
+                            true,
+                        ],
+                    },
+                    left: None,
+                    right: None,
+                },
+            ),
+            right: Some(
+                HuffNode {
+                    count: 1,
+                    letter: Some(
+                        'r',
+                    ),
+                    book: {
+                        'r': [
+                            false,
+                        ],
+                    },
+                    left: None,
+                    right: None,
+                },
+            ),
+        },
+    ),
+    right: Some(
+        HuffNode {
+            count: 2,
+            letter: Some(
+                'e',
+            ),
+            book: {
+                'e': [
+                    false,
+                ],
+            },
+            left: None,
+            right: None,
+        },
+    ),
+}
