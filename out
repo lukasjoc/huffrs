@@ -1,0 +1,90 @@
+[
+    HuffNode {
+        count: 7,
+        letter: None,
+        left: Some(
+            HuffNode {
+                count: 3,
+                letter: None,
+                left: Some(
+                    HuffNode {
+                        count: 1,
+                        letter: Some(
+                            'u',
+                        ),
+                        left: None,
+                        right: None,
+                    },
+                ),
+                right: Some(
+                    HuffNode {
+                        count: 2,
+                        letter: None,
+                        left: Some(
+                            HuffNode {
+                                count: 1,
+                                letter: Some(
+                                    'n',
+                                ),
+                                left: None,
+                                right: None,
+                            },
+                        ),
+                        right: Some(
+                            HuffNode {
+                                count: 1,
+                                letter: Some(
+                                    'm',
+                                ),
+                                left: None,
+                                right: None,
+                            },
+                        ),
+                    },
+                ),
+            },
+        ),
+        right: Some(
+            HuffNode {
+                count: 4,
+                letter: None,
+                left: Some(
+                    HuffNode {
+                        count: 2,
+                        letter: None,
+                        left: Some(
+                            HuffNode {
+                                count: 1,
+                                letter: Some(
+                                    'H',
+                                ),
+                                left: None,
+                                right: None,
+                            },
+                        ),
+                        right: Some(
+                            HuffNode {
+                                count: 1,
+                                letter: Some(
+                                    'a',
+                                ),
+                                left: None,
+                                right: None,
+                            },
+                        ),
+                    },
+                ),
+                right: Some(
+                    HuffNode {
+                        count: 2,
+                        letter: Some(
+                            'f',
+                        ),
+                        left: None,
+                        right: None,
+                    },
+                ),
+            },
+        ),
+    },
+]
