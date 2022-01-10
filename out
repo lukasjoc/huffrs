@@ -1,89 +1,182 @@
-[
+CodeBook for Tree: [
     HuffNode {
-        count: 7,
+        count: 2,
+        letter: Some(
+            'y',
+        ),
+        book: {},
+        left: None,
+        right: None,
+    },
+    HuffNode {
+        count: 13,
         letter: None,
+        book: {
+            'i': [
+                false,
+                true,
+            ],
+            'b': [
+                false,
+                true,
+                true,
+            ],
+            '_': [
+                true,
+                true,
+                true,
+                true,
+            ],
+            'o': [
+                false,
+                true,
+                true,
+                true,
+            ],
+            't': [
+                false,
+            ],
+        },
         left: Some(
             HuffNode {
-                count: 3,
+                count: 11,
                 letter: None,
+                book: {
+                    'b': [
+                        false,
+                        true,
+                        true,
+                    ],
+                    'i': [
+                        false,
+                        true,
+                    ],
+                    '_': [
+                        true,
+                        true,
+                        true,
+                        true,
+                    ],
+                    'o': [
+                        false,
+                        true,
+                        true,
+                        true,
+                    ],
+                },
                 left: Some(
                     HuffNode {
-                        count: 1,
-                        letter: Some(
-                            'u',
-                        ),
-                        left: None,
-                        right: None,
-                    },
-                ),
-                right: Some(
-                    HuffNode {
-                        count: 2,
+                        count: 8,
                         letter: None,
+                        book: {
+                            '_': [
+                                true,
+                                true,
+                                true,
+                            ],
+                            'b': [
+                                false,
+                                true,
+                            ],
+                            'o': [
+                                false,
+                                true,
+                                true,
+                            ],
+                        },
                         left: Some(
                             HuffNode {
-                                count: 1,
-                                letter: Some(
-                                    'n',
+                                count: 2,
+                                letter: None,
+                                book: {
+                                    '_': [
+                                        true,
+                                        true,
+                                    ],
+                                    'o': [
+                                        false,
+                                        true,
+                                    ],
+                                },
+                                left: Some(
+                                    HuffNode {
+                                        count: 1,
+                                        letter: Some(
+                                            '_',
+                                        ),
+                                        book: {
+                                            '_': [
+                                                true,
+                                            ],
+                                        },
+                                        left: None,
+                                        right: None,
+                                    },
                                 ),
-                                left: None,
-                                right: None,
+                                right: Some(
+                                    HuffNode {
+                                        count: 1,
+                                        letter: Some(
+                                            'o',
+                                        ),
+                                        book: {
+                                            'o': [
+                                                false,
+                                            ],
+                                        },
+                                        left: None,
+                                        right: None,
+                                    },
+                                ),
                             },
                         ),
                         right: Some(
                             HuffNode {
-                                count: 1,
+                                count: 6,
                                 letter: Some(
-                                    'm',
+                                    'b',
                                 ),
+                                book: {
+                                    'b': [
+                                        false,
+                                    ],
+                                },
                                 left: None,
                                 right: None,
                             },
                         ),
+                    },
+                ),
+                right: Some(
+                    HuffNode {
+                        count: 3,
+                        letter: Some(
+                            'i',
+                        ),
+                        book: {
+                            'i': [
+                                false,
+                            ],
+                        },
+                        left: None,
+                        right: None,
                     },
                 ),
             },
         ),
         right: Some(
             HuffNode {
-                count: 4,
-                letter: None,
-                left: Some(
-                    HuffNode {
-                        count: 2,
-                        letter: None,
-                        left: Some(
-                            HuffNode {
-                                count: 1,
-                                letter: Some(
-                                    'H',
-                                ),
-                                left: None,
-                                right: None,
-                            },
-                        ),
-                        right: Some(
-                            HuffNode {
-                                count: 1,
-                                letter: Some(
-                                    'a',
-                                ),
-                                left: None,
-                                right: None,
-                            },
-                        ),
-                    },
+                count: 2,
+                letter: Some(
+                    't',
                 ),
-                right: Some(
-                    HuffNode {
-                        count: 2,
-                        letter: Some(
-                            'f',
-                        ),
-                        left: None,
-                        right: None,
-                    },
-                ),
+                book: {
+                    't': [
+                        false,
+                    ],
+                },
+                left: None,
+                right: None,
             },
         ),
     },
