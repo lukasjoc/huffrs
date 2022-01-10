@@ -1,0 +1,13 @@
+CodeBook: {
+    'T': [
+        true,
+        false,
+    ],
+    'e': [
+        false,
+    ],
+    'r': [
+        true,
+        true,
+    ],
+}

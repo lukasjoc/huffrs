@@ -1,18 +1,21 @@
 use std::collections::*;
 use std::str;
 
+type HuffBook = BTreeMap<char, Vec<bool>>;
+type FreqMap = BTreeMap<char, HuffNode>;
+
 #[derive(Debug, Default)]
 struct HuffNode {
     count: i32,
     letter: Option<char>,
-    book: BTreeMap<char, Vec<bool>>,
+    book: HuffBook,
     left: Option<Box<HuffNode>>,
     right: Option<Box<HuffNode>>,
 }
 
 impl HuffNode {
     fn new(count: i32, letter: Option<char>,
-            book: Option<BTreeMap<char, Vec<bool>>>) -> Self {
+           book: Option<HuffBook>) -> Self {
         Self {
             count,
             letter,
@@ -36,7 +39,7 @@ impl HuffNode {
 }
 
 fn map_book<'a>(letter: Option<char>, dir: bool,
-        mut book: &'a mut BTreeMap<char, Vec<bool>> ) -> &'a BTreeMap<char, Vec<bool>> {
+                mut book: &'a mut HuffBook ) -> &'a HuffBook {
 
     book = match letter {
         Some(letter) => {
@@ -55,7 +58,7 @@ fn map_book<'a>(letter: Option<char>, dir: bool,
     book
 }
 
-fn build_tree(freq: BTreeMap<char, HuffNode>) -> HuffNode {
+fn build_tree(freq: FreqMap) -> HuffNode {
 
     let mut nodes: Vec<HuffNode> = freq.into_iter().map(|e| e.1).collect();
     nodes.sort_by(|a, b| b.count.cmp(&a.count));
@@ -70,7 +73,7 @@ fn build_tree(freq: BTreeMap<char, HuffNode>) -> HuffNode {
         let lbook = map_book(lnode_ref.letter, true, &mut lnode_ref.book);
         let rbook = map_book(rnode_ref.letter, false, &mut rnode_ref.book);
 
-        let book: BTreeMap<char, Vec<bool>> = lbook
+        let book: HuffBook = lbook
             .to_owned()
             .into_iter()
             .chain(rbook.to_owned())
@@ -97,7 +100,7 @@ fn build_tree(freq: BTreeMap<char, HuffNode>) -> HuffNode {
     tree
 }
 
-fn build_map(phrase: &str) -> BTreeMap<char, HuffNode> {
+fn build_map(phrase: &str) -> FreqMap {
     let chars: Vec<_> = phrase.chars().collect();
     let mut freq = BTreeMap::new();
 
@@ -117,7 +120,7 @@ fn main() {
     let freq = build_map(a);
 
     // The Tree with BitBook and Nodes
-	let tree = build_tree(freq);
+    let tree = build_tree(freq);
 
     println!("CodeBook: {:#?}", tree.book);
 }
