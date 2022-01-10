@@ -14,8 +14,7 @@ struct HuffNode {
 }
 
 impl HuffNode {
-    fn new(count: i32, letter: Option<char>,
-           book: Option<HuffBook>) -> Self {
+    fn new(count: i32, letter: Option<char>, book: Option<HuffBook>) -> Self {
         Self {
             count,
             letter,
@@ -38,9 +37,7 @@ impl HuffNode {
     }
 }
 
-fn map_book<'a>(letter: Option<char>, dir: bool,
-                mut book: &'a mut HuffBook ) -> &'a HuffBook {
-
+fn map_book<'a>(letter: Option<char>, dir: bool, mut book: &'a mut HuffBook) -> &'a HuffBook {
     book = match letter {
         Some(letter) => {
             book.entry(letter).or_insert(vec![dir]);
@@ -57,7 +54,6 @@ fn map_book<'a>(letter: Option<char>, dir: bool,
 
     book
 }
-
 
 #[derive(Debug)]
 struct HuffTree {
@@ -82,7 +78,8 @@ impl HuffTree {
     fn build_map(mut self) -> Self {
         for letter in &self.chars {
             let node = HuffNode::new(1, Some(*letter), None);
-            self.freq.entry(*letter)
+            self.freq
+                .entry(*letter)
                 .and_modify(|e: &mut HuffNode| e.count += 1)
                 .or_insert(node);
         }
@@ -136,9 +133,7 @@ impl HuffTree {
 fn main() {
     let a = "Tree"; //"ABCDEFGHIJKLMNOPQRSTUVWXYXabcdefghijklmnopqrstuvwxyz";
 
-    let huff = HuffTree::new(a.to_string())
-        .build_map()
-        .build_tree();
+    let huff = HuffTree::new(a.to_string()).build_map().build_tree();
 
     println!("{:#?}", huff);
 }
