@@ -58,69 +58,87 @@ fn map_book<'a>(letter: Option<char>, dir: bool,
     book
 }
 
-fn build_tree(freq: FreqMap) -> HuffNode {
 
-    let mut nodes: Vec<HuffNode> = freq.into_iter().map(|e| e.1).collect();
-    nodes.sort_by(|a, b| b.count.cmp(&a.count));
+#[derive(Debug)]
+struct HuffTree {
+    book: HuffBook,
+    freq: FreqMap,
+    stdin: String,
+    chars: Vec<char>,
+    head: Option<HuffNode>,
+}
 
-    while nodes.len() > 1 {
-        let mut lnode = nodes.pop().unwrap();
-        let mut rnode = nodes.pop().unwrap();
-
-        let lnode_ref = &mut lnode;
-        let rnode_ref = &mut rnode;
-
-        let lbook = map_book(lnode_ref.letter, true, &mut lnode_ref.book);
-        let rbook = map_book(rnode_ref.letter, false, &mut rnode_ref.book);
-
-        let book: HuffBook = lbook
-            .to_owned()
-            .into_iter()
-            .chain(rbook.to_owned())
-            .collect();
-
-        let count = lnode_ref.count + rnode_ref.count;
-        let node = HuffNode::new(count, None, Some(book))
-            .left(lnode)
-            .right(rnode);
-
-        nodes.push(node);
-        if nodes.len() == 2 {
-            nodes.sort_by(|a, b| b.letter.cmp(&a.letter));
-        } else {
-            nodes.sort_by(|a, b| b.count.cmp(&a.count));
+impl HuffTree {
+    fn new(stdin: String) -> Self {
+        Self {
+            book: BTreeMap::new(),
+            freq: BTreeMap::new(),
+            chars: stdin.chars().collect(),
+            stdin: stdin,
+            head: None,
         }
     }
 
-    let mut tree = nodes.pop().unwrap();
-    for (_, v) in tree.book.iter_mut() {
-        v.reverse();
+    fn build_map(mut self) -> Self {
+        for letter in &self.chars {
+            let node = HuffNode::new(1, Some(*letter), None);
+            self.freq.entry(*letter)
+                .and_modify(|e: &mut HuffNode| e.count += 1)
+                .or_insert(node);
+        }
+
+        self
     }
 
-    tree
-}
+    fn build_tree(self) -> HuffNode {
+        let mut nodes: Vec<HuffNode> = self.freq.into_iter().map(|e| e.1).collect();
 
-fn build_map(phrase: &str) -> FreqMap {
-    let chars: Vec<_> = phrase.chars().collect();
-    let mut freq = BTreeMap::new();
+        nodes.sort_by(|a, b| b.count.cmp(&a.count));
 
-    for letter in chars {
-        let node = HuffNode::new(1, Some(letter), None);
-        freq.entry(letter)
-            .and_modify(|e: &mut HuffNode| e.count += 1)
-            .or_insert(node);
+        while nodes.len() > 1 {
+            let mut lnode = nodes.pop().unwrap();
+            let mut rnode = nodes.pop().unwrap();
+
+            let lnode_ref = &mut lnode;
+            let rnode_ref = &mut rnode;
+
+            let lbook = map_book(lnode_ref.letter, true, &mut lnode_ref.book);
+            let rbook = map_book(rnode_ref.letter, false, &mut rnode_ref.book);
+
+            let book: HuffBook = lbook
+                .to_owned()
+                .into_iter()
+                .chain(rbook.to_owned())
+                .collect();
+
+            let count = lnode_ref.count + rnode_ref.count;
+            let node = HuffNode::new(count, None, Some(book))
+                .left(lnode)
+                .right(rnode);
+
+            nodes.push(node);
+            if nodes.len() == 2 {
+                nodes.sort_by(|a, b| b.letter.cmp(&a.letter));
+            } else {
+                nodes.sort_by(|a, b| b.count.cmp(&a.count));
+            }
+        }
+
+        let mut tree = nodes.pop().unwrap();
+        for (_, v) in tree.book.iter_mut() {
+            v.reverse();
+        }
+
+        tree
     }
-    freq
 }
 
 fn main() {
     let a = "Tree"; //"ABCDEFGHIJKLMNOPQRSTUVWXYXabcdefghijklmnopqrstuvwxyz";
 
-    // The Frequency Map
-    let freq = build_map(a);
+    let huff = HuffTree::new(a.to_string())
+        .build_map()
+        .build_tree();
 
-    // The Tree with BitBook and Nodes
-    let tree = build_tree(freq);
-
-    println!("CodeBook: {:#?}", tree.book);
+    println!("{:#?}", huff);
 }
