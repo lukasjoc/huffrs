@@ -1,12 +1,12 @@
 use std::collections::*;
-use std::str;
 
 type HuffBook = BTreeMap<char, Vec<bool>>;
+
 type FreqMap = BTreeMap<char, HuffNode>;
 
 #[derive(Debug, Default)]
 struct HuffNode {
-    count: i32,
+    count: Option<i32>,
     letter: Option<char>,
     book: HuffBook,
     left: Option<Box<HuffNode>>,
@@ -14,7 +14,7 @@ struct HuffNode {
 }
 
 impl HuffNode {
-    fn new(count: i32, letter: Option<char>, book: Option<HuffBook>) -> Self {
+    fn new(count: Option<i32>, letter: Option<char>, book: Option<HuffBook>) -> Self {
         Self {
             count,
             letter,
@@ -57,37 +57,32 @@ fn map_book<'a>(letter: Option<char>, dir: bool, mut book: &'a mut HuffBook) -> 
 
 #[derive(Debug)]
 struct HuffTree {
-    book: HuffBook,
     freq: FreqMap,
-    stdin: String,
     chars: Vec<char>,
     head: Option<HuffNode>,
 }
 
 impl HuffTree {
     fn new(stdin: String) -> Self {
+        let chars: Vec<_> = stdin.chars().collect();
+        let mut freq = BTreeMap::new();
+
+        for letter in &chars {
+            let node = HuffNode::new(Some(1), Some(*letter), None);
+            freq
+                .entry(*letter)
+                .and_modify(|e: &mut HuffNode| e.count = Some(*&mut e.count.unwrap() + 1))
+                .or_insert(node);
+        }
+
         Self {
-            book: BTreeMap::new(),
-            freq: BTreeMap::new(),
-            chars: stdin.chars().collect(),
-            stdin: stdin,
+            freq,
+            chars,
             head: None,
         }
     }
 
-    fn build_map(mut self) -> Self {
-        for letter in &self.chars {
-            let node = HuffNode::new(1, Some(*letter), None);
-            self.freq
-                .entry(*letter)
-                .and_modify(|e: &mut HuffNode| e.count += 1)
-                .or_insert(node);
-        }
-
-        self
-    }
-
-    fn build_tree(self) -> HuffNode {
+    fn build_tree(mut self) -> Option<HuffNode> {
         let mut nodes: Vec<HuffNode> = self.freq.into_iter().map(|e| e.1).collect();
 
         nodes.sort_by(|a, b| b.count.cmp(&a.count));
@@ -108,8 +103,8 @@ impl HuffTree {
                 .chain(rbook.to_owned())
                 .collect();
 
-            let count = lnode_ref.count + rnode_ref.count;
-            let node = HuffNode::new(count, None, Some(book))
+            let count = lnode_ref.count.unwrap() + rnode_ref.count.unwrap();
+            let node = HuffNode::new(Some(count), None, Some(book))
                 .left(lnode)
                 .right(rnode);
 
@@ -121,19 +116,40 @@ impl HuffTree {
             }
         }
 
-        let mut tree = nodes.pop().unwrap();
-        for (_, v) in tree.book.iter_mut() {
+        let mut head_node = nodes.pop().unwrap();
+        for (_, v) in head_node.book.iter_mut() {
             v.reverse();
         }
 
-        tree
+        self.head = Some(head_node);
+        // self
+        self.head
+    }
+
+    fn encode(self) -> String {
+        let mut enc = String::new();
+        for l in  {
+            enc = format!("{}{:?}",enc, self.head.as_ref().unwrap().book[&l]);
+        }
+        enc.to_string()
+    }
+    fn decode(self, encoded: String) -> String {
+        todo!()
     }
 }
 
 fn main() {
-    let a = "Tree"; //"ABCDEFGHIJKLMNOPQRSTUVWXYXabcdefghijklmnopqrstuvwxyz";
+    let a = String::from("bibbity_bobbity");
 
-    let huff = HuffTree::new(a.to_string()).build_map().build_tree();
+    let huff = HuffTree::new(a).build_tree();
 
-    println!("{:#?}", huff);
+    //let tree = match huff.build_tree() {
+    //    Some(tree) => tree,
+    //    None => HuffNode::new(None, None, None),
+    //};
+    //
+    // FIX THIS DICK
+
+    println!("{:#?}", huff.encode());
 }
+
