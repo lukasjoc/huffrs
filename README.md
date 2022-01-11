@@ -3,18 +3,18 @@
 > Simple Huffman Encoding/Decoding
 
 Start:
-```
+```bash
 RUST_BACKTRACE=1 cargo run
 ```
 
 Release:
-```
+```bash
 cargo build --release
 ```
 
 Usage:
-```
-cat data | ./huffrs > data.huff
+```bash
+cat data | ./target/release/huffrs
 ```
 
 Links:
