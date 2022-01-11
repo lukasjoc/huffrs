@@ -1,3 +1,4 @@
+use std::io::{self, BufRead};
 use std::collections::*;
 
 type HuffBook = BTreeMap<char, String>;
@@ -174,10 +175,16 @@ fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
     dec.as_str()
 }
 
-fn main() {
-    let a = String::from("bibbity_bobbity");
+fn main() -> io::Result<()> {
+    let mut stdin_text = String::new();
 
-    let huff = HuffTree::new(a.clone());
+    let stdin = io::stdin();
+
+    let mut handle = stdin.lock();
+
+    handle.read_line(&mut stdin_text)?;
+
+    let huff = HuffTree::new(stdin_text.clone());
 
     let tree = match huff.build_tree() {
         Some(tree) => tree,
@@ -185,30 +192,28 @@ fn main() {
     };
 
     let mut encoded_string = String::new();
-    let encoded_string = encode(&a, &mut encoded_string, &tree.book);
 
-    let mut dyn_decoded_string= String::new();
+    let encoded_string = encode(&stdin_text, &mut encoded_string, &tree.book);
 
-    let dyn_decoded_string = decode(&encoded_string, &mut dyn_decoded_string, &tree.book);
-
-    println!("Dyn Decode: {} | {:?}", encoded_string, dyn_decoded_string);
-
-    let static_encoded_string = String::from("01000010010111011110111000100101110");
-    let mut static_huffbook: HuffBook = BTreeMap::new();
-    static_huffbook.insert('b', String::from("0"));
-    static_huffbook.insert('i', String::from("100"));
-    static_huffbook.insert('t', String::from("101"));
-    static_huffbook.insert('y', String::from("110"));
-    static_huffbook.insert('o', String::from("1110"));
-    static_huffbook.insert('_', String::from("1111"));
+    println!("Stdin(Tree): {:#?}", tree);
+    println!("Stdin(Decode): {}", encoded_string);
 
 
-    let mut static_decoded_string = String::new();
+    let a1 = String::from("Tree\n");
+    let huff1 = HuffTree::new(a1.clone());
 
-    let static_decoded_string = decode(&static_encoded_string,
-                                &mut static_decoded_string, &static_huffbook);
+    let tree1 = match huff1.build_tree() {
+        Some(tree1) => tree1,
+        None => HuffNode::new(None, None, None),
+    };
 
-    println!("Static Decode: {} | {:?}", static_encoded_string, static_decoded_string);
+    let mut encoded_string1 = String::new();
+
+    let encoded_string1 = encode(&a1, &mut encoded_string1, &tree1.book);
+
+    println!("Static(Tree): {:#?}", tree1);
+    println!("Static(Decode): {}", encoded_string1);
+
+    Ok(())
 }
-
 

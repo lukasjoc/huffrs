@@ -1,0 +1,196 @@
+Stdin(Tree): HuffNode {
+    count: Some(
+        5,
+    ),
+    letter: None,
+    book: {
+        '\n': "11",
+        'T': "100",
+        'e': "0",
+        'r': "101",
+    },
+    left: Some(
+        HuffNode {
+            count: Some(
+                3,
+            ),
+            letter: None,
+            book: {
+                '\n': "11",
+                'T': "001",
+                'r': "101",
+            },
+            left: Some(
+                HuffNode {
+                    count: Some(
+                        1,
+                    ),
+                    letter: Some(
+                        '\n',
+                    ),
+                    book: {
+                        '\n': "1",
+                    },
+                    left: None,
+                    right: None,
+                },
+            ),
+            right: Some(
+                HuffNode {
+                    count: Some(
+                        2,
+                    ),
+                    letter: None,
+                    book: {
+                        'T': "00",
+                        'r': "10",
+                    },
+                    left: Some(
+                        HuffNode {
+                            count: Some(
+                                1,
+                            ),
+                            letter: Some(
+                                'r',
+                            ),
+                            book: {
+                                'r': "1",
+                            },
+                            left: None,
+                            right: None,
+                        },
+                    ),
+                    right: Some(
+                        HuffNode {
+                            count: Some(
+                                1,
+                            ),
+                            letter: Some(
+                                'T',
+                            ),
+                            book: {
+                                'T': "0",
+                            },
+                            left: None,
+                            right: None,
+                        },
+                    ),
+                },
+            ),
+        },
+    ),
+    right: Some(
+        HuffNode {
+            count: Some(
+                2,
+            ),
+            letter: Some(
+                'e',
+            ),
+            book: {
+                'e': "0",
+            },
+            left: None,
+            right: None,
+        },
+    ),
+}
+Stdin(Decode): 1001010011
+Static(Tree): HuffNode {
+    count: Some(
+        5,
+    ),
+    letter: None,
+    book: {
+        '\n': "11",
+        'T': "100",
+        'e': "0",
+        'r': "101",
+    },
+    left: Some(
+        HuffNode {
+            count: Some(
+                3,
+            ),
+            letter: None,
+            book: {
+                '\n': "11",
+                'T': "001",
+                'r': "101",
+            },
+            left: Some(
+                HuffNode {
+                    count: Some(
+                        1,
+                    ),
+                    letter: Some(
+                        '\n',
+                    ),
+                    book: {
+                        '\n': "1",
+                    },
+                    left: None,
+                    right: None,
+                },
+            ),
+            right: Some(
+                HuffNode {
+                    count: Some(
+                        2,
+                    ),
+                    letter: None,
+                    book: {
+                        'T': "00",
+                        'r': "10",
+                    },
+                    left: Some(
+                        HuffNode {
+                            count: Some(
+                                1,
+                            ),
+                            letter: Some(
+                                'r',
+                            ),
+                            book: {
+                                'r': "1",
+                            },
+                            left: None,
+                            right: None,
+                        },
+                    ),
+                    right: Some(
+                        HuffNode {
+                            count: Some(
+                                1,
+                            ),
+                            letter: Some(
+                                'T',
+                            ),
+                            book: {
+                                'T': "0",
+                            },
+                            left: None,
+                            right: None,
+                        },
+                    ),
+                },
+            ),
+        },
+    ),
+    right: Some(
+        HuffNode {
+            count: Some(
+                2,
+            ),
+            letter: Some(
+                'e',
+            ),
+            book: {
+                'e': "0",
+            },
+            left: None,
+            right: None,
+        },
+    ),
+}
+Static(Decode): 1001010011
