@@ -9,7 +9,12 @@ RUST_BACKTRACE=1 cargo run
 
 Release:
 ```
-cargo run --release
+cargo build --release
+```
+
+Usage:
+```
+cat data | ./huffrs > data.huff
 ```
 
 Links:
