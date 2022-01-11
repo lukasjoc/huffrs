@@ -133,12 +133,46 @@ fn encode<'a >(stdin: &str, enc: &'a mut String,  book: &HuffBook) -> &'a str {
     for l in stdin_chars {
         enc.push_str(&book[&l].to_string());
     }
+
     enc.as_str()
 }
 
-//fn decode(encoded: String) -> String {
-//    todo!()
-//}
+
+fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
+    let mut codes: Vec<_> = book.into_iter().collect();
+    codes.sort_by(|a, b| b.1.chars().count().cmp(&a.1.chars().count()));
+
+    let mut index = 0;
+
+    while index < stdin.chars().count() {
+        // check for each code if it matches fully with its respective length
+        for (k, v) in &codes {
+            let v_char_count = v.chars().count();
+            let v_matches = match stdin.get(index..index+v_char_count) {
+                Some(sub) => sub == v.as_str(),
+                None => false,
+            };
+
+            // if the substring code is the actual code then we matched successfully
+            if v_matches {
+                dec.push_str(&k.to_string());
+                index += v_char_count-1;
+
+                // At this point, we know that, there is no other match possible
+                break
+            }
+        }
+        // the normal case when the current index is not matching to any
+        // item in the book. (This should not happend with a valid bitbook)
+        // and a valid encoded string.
+        //
+        // The Encoded String *MUST* be encoded with the bitbook given to this
+        // function. Otherwise it might(probably will) not work.
+        index += 1;
+    }
+
+    dec.as_str()
+}
 
 fn main() {
     let a = String::from("bibbity_bobbity");
@@ -153,7 +187,28 @@ fn main() {
     let mut encoded_string = String::new();
     let encoded_string = encode(&a, &mut encoded_string, &tree.book);
 
-    println!("{:?}", encoded_string);
+    let mut dyn_decoded_string= String::new();
+
+    let dyn_decoded_string = decode(&encoded_string, &mut dyn_decoded_string, &tree.book);
+
+    println!("Dyn Decode: {} | {:?}", encoded_string, dyn_decoded_string);
+
+    let static_encoded_string = String::from("01000010010111011110111000100101110");
+    let mut static_huffbook: HuffBook = BTreeMap::new();
+    static_huffbook.insert('b', String::from("0"));
+    static_huffbook.insert('i', String::from("100"));
+    static_huffbook.insert('t', String::from("101"));
+    static_huffbook.insert('y', String::from("110"));
+    static_huffbook.insert('o', String::from("1110"));
+    static_huffbook.insert('_', String::from("1111"));
+
+
+    let mut static_decoded_string = String::new();
+
+    let static_decoded_string = decode(&static_encoded_string,
+                                &mut static_decoded_string, &static_huffbook);
+
+    println!("Static Decode: {} | {:?}", static_encoded_string, static_decoded_string);
 }
 
 
