@@ -1,6 +1,6 @@
 use std::collections::*;
 
-type HuffBook = BTreeMap<char, String>;
+type HuffBook = BTreeMap<char, Vec<bool>>;
 
 type FreqMap = BTreeMap<char, HuffNode>;
 
@@ -37,16 +37,16 @@ impl HuffNode {
     }
 }
 
-fn map_book<'a>(letter: Option<char>, dir: String, mut book: &'a mut HuffBook) -> &'a HuffBook {
+fn map_book<'a>(letter: Option<char>, dir: bool, mut book: &'a mut HuffBook) -> &'a HuffBook {
     book = match letter {
         Some(letter) => {
-            book.entry(letter).or_insert(dir);
+            book.entry(letter).or_insert(vec![dir]);
             book
         }
 
         None => {
             for (_, value) in book.iter_mut() {
-                *value = String::from(format!("{}{}", value, dir));
+                value.push(dir);
             }
             book
         }
@@ -58,6 +58,7 @@ fn map_book<'a>(letter: Option<char>, dir: String, mut book: &'a mut HuffBook) -
 #[derive(Debug)]
 struct HuffTree {
     freq: FreqMap,
+    chars: Vec<char>,
     head: Option<HuffNode>,
 }
 
@@ -76,6 +77,7 @@ impl HuffTree {
 
         Self {
             freq,
+            chars,
             head: None,
         }
     }
@@ -92,11 +94,8 @@ impl HuffTree {
             let lnode_ref = &mut lnode;
             let rnode_ref = &mut rnode;
 
-            let lbook = map_book(lnode_ref.letter, String::from("1"),
-                &mut lnode_ref.book);
-
-            let rbook = map_book(rnode_ref.letter, String::from("0"),
-                &mut rnode_ref.book);
+            let lbook = map_book(lnode_ref.letter, true, &mut lnode_ref.book);
+            let rbook = map_book(rnode_ref.letter, false, &mut rnode_ref.book);
 
             let book: HuffBook = lbook
                 .to_owned()
@@ -119,10 +118,11 @@ impl HuffTree {
 
         let mut head_node = nodes.pop().unwrap();
         for (_, v) in head_node.book.iter_mut() {
-            *v= v.chars().rev().collect();
+            v.reverse();
         }
 
         self.head = Some(head_node);
+        // self
         self.head
     }
 
@@ -131,14 +131,15 @@ impl HuffTree {
 fn encode<'a >(stdin: &str, enc: &'a mut String,  book: &HuffBook) -> &'a str {
     let stdin_chars: Vec<char> = stdin.chars().collect();
     for l in stdin_chars {
-        enc.push_str(&book[&l].to_string());
+        *enc = format!("{}{:?}", enc, book[&l]);
     }
     enc.as_str()
 }
 
-//fn decode(encoded: String) -> String {
-//    todo!()
-//}
+fn decode(encoded: String) -> String {
+    todo!()
+}
+
 
 fn main() {
     let a = String::from("bibbity_bobbity");
@@ -155,5 +156,4 @@ fn main() {
 
     println!("{:?}", encoded_string);
 }
-
 
