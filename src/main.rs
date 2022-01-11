@@ -1,5 +1,5 @@
-use std::io::{self, BufRead};
 use std::collections::*;
+use std::io::{self, BufRead};
 
 type HuffBook = BTreeMap<char, String>;
 
@@ -38,7 +38,11 @@ impl HuffNode {
     }
 }
 
-fn map_book<'a>(letter: Option<char>, dir: String, mut book: &'a mut HuffBook) -> &'a HuffBook {
+fn map_book<'a>(
+    letter: Option<char>,
+    dir: String,
+    mut book: &'a mut HuffBook,
+) -> &'a HuffBook {
     book = match letter {
         Some(letter) => {
             book.entry(letter).or_insert(dir);
@@ -69,16 +73,12 @@ impl HuffTree {
 
         for letter in &chars {
             let node = HuffNode::new(Some(1), Some(*letter), None);
-            freq
-                .entry(*letter)
+            freq.entry(*letter)
                 .and_modify(|e: &mut HuffNode| e.count = Some(*&mut e.count.unwrap() + 1))
                 .or_insert(node);
         }
 
-        Self {
-            freq,
-            head: None,
-        }
+        Self { freq, head: None }
     }
 
     fn build_tree(mut self) -> Option<HuffNode> {
@@ -93,11 +93,9 @@ impl HuffTree {
             let lnode_ref = &mut lnode;
             let rnode_ref = &mut rnode;
 
-            let lbook = map_book(lnode_ref.letter, String::from("1"),
-                &mut lnode_ref.book);
+            let lbook = map_book(lnode_ref.letter, String::from("1"), &mut lnode_ref.book);
 
-            let rbook = map_book(rnode_ref.letter, String::from("0"),
-                &mut rnode_ref.book);
+            let rbook = map_book(rnode_ref.letter, String::from("0"), &mut rnode_ref.book);
 
             let book: HuffBook = lbook
                 .to_owned()
@@ -120,16 +118,15 @@ impl HuffTree {
 
         let mut head_node = nodes.pop().unwrap();
         for (_, v) in head_node.book.iter_mut() {
-            *v= v.chars().rev().collect();
+            *v = v.chars().rev().collect();
         }
 
         self.head = Some(head_node);
         self.head
     }
-
 }
 
-fn encode<'a >(stdin: &str, enc: &'a mut String,  book: &HuffBook) -> &'a str {
+fn encode<'a>(stdin: &str, enc: &'a mut String, book: &HuffBook) -> &'a str {
     let stdin_chars: Vec<char> = stdin.chars().collect();
     for l in stdin_chars {
         enc.push_str(&book[&l].to_string());
@@ -137,7 +134,6 @@ fn encode<'a >(stdin: &str, enc: &'a mut String,  book: &HuffBook) -> &'a str {
 
     enc.as_str()
 }
-
 
 fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
     let mut codes: Vec<_> = book.into_iter().collect();
@@ -149,7 +145,7 @@ fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
         // check for each code if it matches fully with its respective length
         for (k, v) in &codes {
             let v_char_count = v.chars().count();
-            let v_matches = match stdin.get(index..index+v_char_count) {
+            let v_matches = match stdin.get(index..index + v_char_count) {
                 Some(sub) => sub == v.as_str(),
                 None => false,
             };
@@ -157,10 +153,10 @@ fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
             // if the substring code is the actual code then we matched successfully
             if v_matches {
                 dec.push_str(&k.to_string());
-                index += v_char_count-1;
+                index += v_char_count - 1;
 
                 // At this point, we know that, there is no other match possible
-                break
+                break;
             }
         }
         // the normal case when the current index is not matching to any
@@ -178,11 +174,11 @@ fn decode<'a>(stdin: &str, dec: &'a mut String, book: &HuffBook) -> &'a str {
 fn main() -> io::Result<()> {
     let mut stdin_text = String::new();
 
-    let stdin = io::stdin();
-
-    let mut handle = stdin.lock();
-
-    handle.read_line(&mut stdin_text)?;
+    let mut line = String::new();
+    while io::stdin().lock().read_line(&mut line).unwrap() > 0 {
+        stdin_text.push_str(&line);
+        line.clear();
+    }
 
     let huff = HuffTree::new(stdin_text.clone());
 
@@ -195,25 +191,23 @@ fn main() -> io::Result<()> {
 
     let encoded_string = encode(&stdin_text, &mut encoded_string, &tree.book);
 
-    println!("Stdin(Tree): {:#?}", tree);
+    //println!("Stdin(Tree): {:#?}", tree);
     println!("Stdin(Decode): {}", encoded_string);
 
-
-    let a1 = String::from("Tree\n");
-    let huff1 = HuffTree::new(a1.clone());
-
-    let tree1 = match huff1.build_tree() {
-        Some(tree1) => tree1,
-        None => HuffNode::new(None, None, None),
-    };
-
-    let mut encoded_string1 = String::new();
-
-    let encoded_string1 = encode(&a1, &mut encoded_string1, &tree1.book);
-
-    println!("Static(Tree): {:#?}", tree1);
-    println!("Static(Decode): {}", encoded_string1);
+    // let a1 = String::from("Tree\n");
+    // let huff1 = HuffTree::new(a1.clone());
+    //
+    // let tree1 = match huff1.build_tree() {
+    //     Some(tree1) => tree1,
+    //     None => HuffNode::new(None, None, None),
+    // };
+    //
+    // let mut encoded_string1 = String::new();
+    //
+    // let encoded_string1 = encode(&a1, &mut encoded_string1, &tree1.book);
+    //
+    // println!("Static(Tree): {:#?}", tree1);
+    // println!("Static(Decode): {}", encoded_string1);
 
     Ok(())
 }
-
