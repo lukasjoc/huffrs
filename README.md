@@ -1,9 +1,18 @@
 # huffrs
 
-> Simple Huffman Encoding/Decoding in Rust
+> Simple Huffman Encoding/Decoding
 
 Start:
 ```
-cargo run
+RUST_BACKTRACE=1 cargo run
 ```
 
+Release:
+```
+cargo run --release
+```
+
+Links:
+===
+
+- https://en.wikipedia.org/wiki/Huffman_coding
